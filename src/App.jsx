@@ -14,7 +14,25 @@ import NotFoundPage from "./pages/NotFoundPage";
 import JobPage, { jobLoader } from "./pages/JobPage";
 
 const App = () => {
-  const addJobSubmit = (newJob) => {};
+  // Add New Job Arrow Function
+  const addJobSubmit = async (newJob) => {
+    const res = await fetch("/api/jobs", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(newJob),
+    });
+  };
+
+  // Delete Job Arrow Function
+  const deleteJob = async (id) => {
+    console.log(id);
+
+    const res = await fetch(`/api/jobs/${id}`, {
+      method: "DELETE",
+    });
+  };
 
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -25,7 +43,11 @@ const App = () => {
           path="/add-job"
           element={<AddJobPage addJobSubmit={addJobSubmit} />}
         />
-        <Route path="/job/:id" element={<JobPage />} loader={jobLoader} />
+        <Route
+          path="/job/:id"
+          element={<JobPage deleteJob={deleteJob} />}
+          loader={jobLoader}
+        />
         <Route path="*" element={<NotFoundPage />} /> // route to notfoundpage
         if wrong path is given
       </Route>
